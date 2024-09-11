@@ -13,7 +13,6 @@ export const JwtService = (user, message, statusCode, res)=>{
     }).json({
         success: true,
         message,
-        token,
         user
     })
 }  

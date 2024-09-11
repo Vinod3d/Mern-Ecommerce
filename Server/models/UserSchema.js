@@ -1,6 +1,7 @@
  import mongoose from "mongoose";
 import { JWT_EXPIRES, JWT_KEY } from "../config/index.js";
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     first_name: {
@@ -40,6 +41,20 @@ const userSchema = new mongoose.Schema({
     },
     { timestamps: true}
 );
+
+
+// FOR HASHING PASSWORD
+userSchema.pre("save", async function(next) {
+    if(!this.isModified("password")){
+        next();
+    }
+    this.password = await bcrypt.hash(this.password, 10);
+})
+
+// FOR COMPARING PASSWORD
+userSchema.methods.comparePassword = async function (enteredPassword){
+    return await bcrypt.compare(enteredPassword, this.password);
+}
 
 
 userSchema.methods.getJWTToken = function(){

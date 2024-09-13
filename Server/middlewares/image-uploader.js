@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let folder = "public/uploads/";
 
-    if (file.fieldname === "category_image") {
+    if (file.fieldname === "categoryimage") {
       folder = "public/uploads/category_images/";
     } else if (file.fieldname === "banner_image") {
       folder = "public/uploads/banner_images/";
@@ -48,8 +48,8 @@ const upload = multer({
     checkFileType(file, cb);
   },
 }).fields([
-  { name: "category_image", maxCount: 1 },
-  { name: "banner_image", maxCount: 1 },
+  { name: "categoryimage", maxCount: 1 },
+  { name: "bannerimage", maxCount: 1 },
 ]);
 
 export default upload;

@@ -5,18 +5,18 @@ import CustomErrorHandler from "../../services/CustomErrorHandler.js";
 const createCategory = async (req, res, next) => {
   try {
     const {
-      category_name,
-      category_url,
+      name,
       desc,
-      meta_description,
-      meta_title,
-      meta_keywords,
-      parent_category,
+      metadesc,
+      metatitle,
+      metakeywords,
+      parentcategory,
       status,
     } = req.body;
+    console.log(req.files?.categoryimage?.[0]?.filename)
 
     // Validate if category name exists
-    const isNameAvailable = await checkIfCategoryExists("name", category_name);
+    const isNameAvailable = await checkIfCategoryExists("name", name);
     if (!isNameAvailable) {
       return next(
         CustomErrorHandler.badRequest(
@@ -26,27 +26,16 @@ const createCategory = async (req, res, next) => {
       );
     }
 
-    // Validate if category URL exists
-    const isUrlAvailable = await checkIfCategoryExists("url", category_url);
-    if (!isUrlAvailable) {
-      return next(
-        CustomErrorHandler.badRequest(
-          "category with this name already exists",
-          "url"
-        )
-      );
-    }
-
     const addcategory = new Category({
-      category_name,
-      category_url: slugify(category_url),
+      name,
+      url: slugify(name).toString(),
       desc,
-      meta_description,
-      meta_title,
-      meta_keywords,
-      parent_category : parent_category == '' ? [] : parent_category,
+      metadesc,
+      metatitle,
+      metakeywords,
+      parentcategory : parentcategory == '' ? [] : parentcategory,
       status,
-      banner: req.files?.category_image?.[0]?.filename || "",
+      banner: req.files?.categoryimage?.[0]?.filename || "",
     });
 
     const result = await addcategory.save();
@@ -61,7 +50,7 @@ const createCategory = async (req, res, next) => {
 };
 
 async function checkIfCategoryExists(key, value) {
-  const query = key === "name" ? { name: value } : { url: value };
+  const query = key === "name" && { name: value };
   const category_response = await Category.findOne(query);
   return !category_response;
 }

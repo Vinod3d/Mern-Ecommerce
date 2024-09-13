@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
 var categorySchema = new mongoose.Schema({
-    category_name:{
+    name:{
         type:String,
         required:[true, "name is required"],
         unique:[true,"name must be unique"],
+        index:true,
     },
-    category_url:{
+    url:{
         type:String,
         required:[true, "name is url"],
         unique:true,
@@ -16,19 +17,19 @@ var categorySchema = new mongoose.Schema({
         type:String,
         required:[true, "description is required"],
     },
-    meta_title:{
+    metatitle:{
         type:String,
         required:[true, "title is required"],
     },
-    meta_description:{
+    metadesc:{
         type:String,
         required:[true, "meta description is required"],
     },
-    meta_keywords:{
+    metakeywords:{
         type:String,
         required:[true, "meta Keywords is required"],
     },
-    parent_category:{
+    parentcategory:{
         type:Array,
         default:[]
     },
@@ -40,7 +41,7 @@ var categorySchema = new mongoose.Schema({
         type: String,
         default:"Active",
       },
-    banner:{
+      categoryimage:{
         type:String,
         default:null
     },
